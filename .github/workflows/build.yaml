@@ -1,0 +1,110 @@
+name: push
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  windows-build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout commit
+        uses: actions/checkout@master
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@master
+        with: { python-version: 3.8 }
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip PyInstaller
+
+      - name: build
+        run: pyinstaller -F main.py
+
+      - name: upload
+        uses: actions/upload-artifact@v1
+        with:
+          name: windows
+          path: dist/main.exe
+
+  macOS-build:
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout commit
+        uses: actions/checkout@master
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@master
+        with: { python-version: 3.8 }
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip PyInstaller
+
+      - name: build
+        run: pyinstaller -F main.py
+
+      - name: upload
+        uses: actions/upload-artifact@v1
+        with:
+          name: macos
+          path: dist/main
+
+  ubuntu-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout commit
+        uses: actions/checkout@master
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@master
+        with: { python-version: 3.8 }
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip PyInstaller
+
+      - name: build
+        run: pyinstaller -F main.py
+
+      - name: upload
+        uses: actions/upload-artifact@v1
+        with:
+          name: linux
+          path: dist/main
+
+  release:
+    needs: [ubuntu-build, macOS-build, windows-build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Linux
+        uses: actions/download-artifact@v1
+        with:
+          name: linux
+
+      - name: Download Mac
+        uses: actions/download-artifact@v1
+        with:
+          name: macos
+
+      - name: Download Windows
+        uses: actions/download-artifact@v1
+        with:
+          name: windows
+
+      - name: Zip
+        run: |
+          tar -C macos -pczvf macos.tar.gz main
+          tar -C linux -pczvf linux.tar.gz main
+          zip --junk-paths windows ./windows/main.exe
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: false
+          prerelease: false
+          files: |
+            windows.zip
+            macos.tar.gz
+            linux.tar.gz
