@@ -22,7 +22,7 @@ jobs:
         run: pyinstaller -F main.py
 
       - name: upload
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v7
         with:
           name: windows
           path: dist/main.exe
@@ -44,7 +44,7 @@ jobs:
         run: pyinstaller -F main.py
 
       - name: upload
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v7
         with:
           name: macos
           path: dist/main
@@ -67,7 +67,7 @@ jobs:
         run: pyinstaller -F main.py
 
       - name: upload
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v7
         with:
           name: linux
           path: dist/main
@@ -78,17 +78,17 @@ jobs:
 
     steps:
       - name: Download Linux
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v8
         with:
           name: linux
 
       - name: Download Mac
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v8
         with:
           name: macos
 
       - name: Download Windows
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v8
         with:
           name: windows
 
