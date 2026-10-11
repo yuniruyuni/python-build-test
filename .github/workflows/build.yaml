@@ -13,7 +13,7 @@ jobs:
 
       - name: Set up Python 3.8
         uses: actions/setup-python@master
-        with: { python-version: 3.8 }
+        with: { python-version: 3.15 }
 
       - name: Upgrade pip
         run: python -m pip install --upgrade pip PyInstaller
@@ -35,7 +35,7 @@ jobs:
 
       - name: Set up Python 3.8
         uses: actions/setup-python@master
-        with: { python-version: 3.8 }
+        with: { python-version: 3.15 }
 
       - name: Upgrade pip
         run: python -m pip install --upgrade pip PyInstaller
@@ -58,7 +58,7 @@ jobs:
 
       - name: Set up Python 3.8
         uses: actions/setup-python@master
-        with: { python-version: 3.8 }
+        with: { python-version: 3.15 }
 
       - name: Upgrade pip
         run: python -m pip install --upgrade pip PyInstaller
